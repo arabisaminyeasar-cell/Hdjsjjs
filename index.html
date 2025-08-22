@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nested Image Slider</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    .main-slider {
+        width: 90%;
+        max-width: 800px;
+        margin-top: 40px;
+        overflow: hidden;
+        position: relative;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .category-container {
+        display: flex;
+        transition: transform 0.5s ease;
+    }
+
+    .category {
+        min-width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .nested-slider {
+        display: flex;
+        overflow: hidden;
+        margin-top: 15px;
+        border-radius: 8px;
+    }
+
+    .nested-images {
+        display: flex;
+        transition: transform 0.5s ease;
+    }
+
+    .nested-images img {
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    .description {
+        font-size: 14px;
+        margin-top: 8px;
+        color: #555;
+    }
+
+    button {
+        background: #333;
+        color: white;
+        border: none;
+        padding: 8px 14px;
+        margin: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background: #555;
+    }
+
+    .nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0,0,0,0.5);
+        border: none;
+        color: white;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 50%;
+    }
+
+    .prev-main { left: 10px; }
+    .next-main { right: 10px; }
+</style>
+</head>
+<body>
+
+<div class="main-slider">
+    <div class="category-container" id="mainSlider">
+        
+        <!-- Category 1 -->
+        <div class="category">
+            <h2>Nature</h2>
+            <div class="nested-slider">
+                <div class="nested-images" data-index="0">
+                    <div>
+                        <img src="https://picsum.photos/800/400?random=1" alt="">
+                        <div class="description">Beautiful mountain view</div>
+                    </div>
+                    <div>
+                        <img src="https://picsum.photos/800/400?random=2" alt="">
+                        <div class="description">Forest at sunrise</div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="prevNested(this)">Prev</button>
+            <button onclick="nextNested(this)">Next</button>
+        </div>
+
+        <!-- Category 2 -->
+        <div class="category">
+            <h2>City</h2>
+            <div class="nested-slider">
+                <div class="nested-images" data-index="0">
+                    <div>
+                        <img src="https://picsum.photos/800/400?random=3" alt="">
+                        <div class="description">Skyline at night</div>
+                    </div>
+                    <div>
+                        <img src="https://picsum.photos/800/400?random=4" alt="">
+                        <div class="description">Busy downtown street</div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="prevNested(this)">Prev</button>
+            <button onclick="nextNested(this)">Next</button>
+        </div>
+
+    </div>
+
+    <button class="nav-btn prev-main" onclick="prevMain()">&#10094;</button>
+    <button class="nav-btn next-main" onclick="nextMain()">&#10095;</button>
+</div>
+
+<script>
+    let mainIndex = 0;
+    const mainSlider = document.getElementById("mainSlider");
+    const totalCategories = document.querySelectorAll(".category").length;
+
+    function updateMainSlider() {
+        mainSlider.style.transform = `translateX(-${mainIndex * 100}%)`;
+    }
+
+    function nextMain() {
+        mainIndex = (mainIndex + 1) % totalCategories;
+        updateMainSlider();
+    }
+
+    function prevMain() {
+        mainIndex = (mainIndex - 1 + totalCategories) % totalCategories;
+        updateMainSlider();
+    }
+
+    function nextNested(btn) {
+        const nestedImages = btn.parentElement.querySelector(".nested-images");
+        let index = parseInt(nestedImages.dataset.index);
+        const totalImages = nestedImages.children.length;
+        index = (index + 1) % totalImages;
+        nestedImages.dataset.index = index;
+        nestedImages.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    function prevNested(btn) {
+        const nestedImages = btn.parentElement.querySelector(".nested-images");
+        let index = parseInt(nestedImages.dataset.index);
+        const totalImages = nestedImages.children.length;
+        index = (index - 1 + totalImages) % totalImages;
+        nestedImages.dataset.index = index;
+        nestedImages.style.transform = `translateX(-${index * 100}%)`;
+    }
+</script>
+
+</body>
+</html>
